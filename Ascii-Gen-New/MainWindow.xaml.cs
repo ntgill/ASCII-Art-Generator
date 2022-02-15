@@ -98,6 +98,7 @@ namespace Ascii_Gen_New {
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e) {// generate button; makes the ascii image
 
+            double temp = txtAscii.FontSize / kernelSize;
             if (imgMain.Source != null) {
                 // change the generate buttons color to red
                 btnGenerate.Background = System.Windows.Media.Brushes.IndianRed;
@@ -108,6 +109,10 @@ namespace Ascii_Gen_New {
 
                 // starts the timer
                 StartClock();
+
+                if (kernelSize != 4) {
+                    txtAscii.FontSize = kernelSize * 1.5;
+                }//end if
 
                 // init worker and start asciify
                 BackgroundWorker worker = worker_Initialize();
@@ -172,6 +177,7 @@ namespace Ascii_Gen_New {
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             numberOfThreads = int.Parse(txtThreads.Text);
+            kernelSize = int.Parse(txtKernels.Text);
             colorRange = cmbRange.SelectedIndex + 1;
             settingsBox.Visibility = Visibility.Collapsed;
         }
@@ -186,6 +192,8 @@ namespace Ascii_Gen_New {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
+
 
 
         #endregion

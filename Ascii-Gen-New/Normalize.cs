@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 
-class Normalize
-{// normalize class used for threading
+class Normalize {// normalize class used for threading
 
     // Fields
     double[] array;

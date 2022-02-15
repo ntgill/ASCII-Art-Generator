@@ -128,6 +128,11 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Margin="10,10,5,10" Text="# of Kernels:" FontWeight="Bold" FontSize="16" FontFamily="Cambria" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        <TextBox x:Name="txtKernels" MinWidth="50" HorizontalAlignment="Right" Text="4" TextAlignment="Center" Margin="0" FontSize="16" VerticalAlignment="Center" MaxLength="2" PreviewTextInput="txtThreads_PreviewTextInput" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Margin="10,10,5,10" Text="Color Range: " FontWeight="Bold" FontSize="16" FontFamily="Cambria" VerticalAlignment="Center" HorizontalAlignment="Left" />
                         <ComboBox Name="cmbRange" Width="50" Height="25" FontSize="16" HorizontalAlignment="Right" IsReadOnly="True" SelectedIndex="0"/>
                     </StackPanel>

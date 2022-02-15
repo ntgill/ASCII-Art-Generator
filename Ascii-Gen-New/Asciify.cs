@@ -19,9 +19,11 @@ public class Asciify {
 
     // CONSTRUCTOR
     public Asciify(BackgroundWorker? worker, double txtBoxWidth, bool multithread, int numberOfThreads, int colorRange, bool invert, bool useKernels, int kernelSize) {
+        
         if (worker != null) {
             this.worker = worker;
-        }
+        }//end if
+
         this.txtBoxWidth = (int)(txtBoxWidth / kernelSize);
         this.multithread = multithread;
         this.numberOfThreads = numberOfThreads;
@@ -40,7 +42,7 @@ public class Asciify {
             // scale down the size of the bitmap
             bmp = Resize(bmp, txtBoxWidth);
         } else {
-            bmp = Resize(bmp, txtBoxWidth * 4);
+            bmp = Resize(bmp, txtBoxWidth * kernelSize);
         }//end if
 
         // returns array of all pixels in bitmap, converted to grey
@@ -49,7 +51,7 @@ public class Asciify {
         // get the normalized values for all grey pixels; value == 0 -- 1
         double[] normalizedPixels;
         if (useKernels) {
-            return AverageColorNew1(greyPixels, bmp.Height, bmp.Width, 4);
+            return AverageColorNew1(greyPixels, bmp.Height, bmp.Width);
         } else {
             return AverageColorOld(greyPixels, bmp.Height, bmp.Width);
         }//end if
@@ -85,7 +87,7 @@ public class Asciify {
         g.Dispose();
 
         return newMap;
-    }
+    }//end method
 
     private double[] GetArrayOfGreyPixels(Bitmap bmp) {// converts pixel to grey and stores it in array
 
@@ -103,10 +105,10 @@ public class Asciify {
                 greyPixels[count] = AverageColor(pixel);
 
                 count++;
-            }
-        }
+            }//end for
+        }//end for
         return greyPixels;
-    }
+    }//end method
 
     private double[] SlowNormalize(double[] arrayIn) {// takes array of every pixel in grey; returns array of values between 0-1
 
@@ -262,11 +264,11 @@ public class Asciify {
         }
         return sb.ToString();
     }
-    private string AverageColorNew1(double[] greyPixels, int height, int width, int kWidth) {
+    private string AverageColorNew1(double[] greyPixels, int height, int width) {
         bool toggle = false;
         StringBuilder sb = new StringBuilder();
-        int kernelSize = kWidth * kWidth;
-        double[] normalized = new double[greyPixels.Length / kernelSize];
+        int kernelArea = kernelSize * kernelSize;
+        double[] normalized = new double[greyPixels.Length / kernelArea];
         int current = 0;
         double min = 0.0;
         double max = 0.0;
@@ -275,15 +277,15 @@ public class Asciify {
         double average;
         //kernel width == 4, kernel size = 16
 
-        for (int y = 0; y < height; y += kWidth) {
+        for (int y = 0; y < height; y += kernelSize) {
 
-            for (int x = 0; x < width; x += kWidth) {
+            for (int x = 0; x < width; x += kernelSize) {
 
                 average = 0.0;
 
-                for (int i = 0; i < kWidth; i++) {
+                for (int i = 0; i < kernelSize; i++) {
 
-                    for (int j = 0; j < kWidth; j++) {
+                    for (int j = 0; j < kernelSize; j++) {
                         current = (y + i) * width + (x + j);
 
                         if (current < greyPixels.Length) {
@@ -297,7 +299,7 @@ public class Asciify {
 
                 }//end 4x4 loop
 
-                average /= kernelSize;
+                average /= kernelArea;
 
                 if (count < normalized.Length) {
                     normalized[count] = average;
@@ -309,7 +311,7 @@ public class Asciify {
         }//end y axis loop
 
         normalized = SlowNormalize(normalized, min, max);
-        newWidth = width / kWidth;
+        newWidth = width / kernelSize;
 
         for (int i = 0; i < normalized.Length; i++) {
 
