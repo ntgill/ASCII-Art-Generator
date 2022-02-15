@@ -18,7 +18,8 @@ namespace Ascii_Gen_New {
         int colorRange = 1;
         bool invert = false;
         bool useKernels = true;
-        int kernelSize = 4;
+        int kernelWidth = 4;
+        int kernelHeight = 4;
         System.Windows.Media.Brush ogColor;
         string currentTime = "00:00:00";
         DispatcherTimer tmr = new DispatcherTimer();
@@ -39,7 +40,7 @@ namespace Ascii_Gen_New {
 
             // initialize combo box in settings
             cmbRange.ItemsSource = new string[] { "1", "2", "3", "4", "5" };
-        }
+        }//end constructor
 
 
         #region METHODS
@@ -73,18 +74,18 @@ namespace Ascii_Gen_New {
             btnGenerate.Background = ogColor;
 
             //Keep same proportions if different kernel size
-            if (kernelSize != 4) {
-                txtAscii.FontSize = kernelSize * 1.5;
+            if (kernelWidth != 4) {
+                txtAscii.FontSize = kernelWidth * 1.5;
             } else {
                 txtAscii.FontSize = 6;
             }//end if
 
         }//end method
 
-        private void worker_DoWork(object? sender, DoWorkEventArgs e)
-        {
+        private void worker_DoWork(object? sender, DoWorkEventArgs e) {
             // get width of the grid column for the text box
             double actualWidth = txtBoxColumn.ActualWidth;
+            double actualHeight = txtBoxRow.ActualHeight;
 
             // bitmap of selected image
             Bitmap bmp = new Bitmap(path);
@@ -95,11 +96,9 @@ namespace Ascii_Gen_New {
             }
 
             // Call asciitize method
-            Asciify asciify = new Asciify(sender as BackgroundWorker, actualWidth, multithread, numberOfThreads, colorRange, invert, useKernels, kernelSize);
+            Asciify asciify = new Asciify(sender as BackgroundWorker, actualWidth, actualHeight, multithread, numberOfThreads, colorRange, invert, useKernels, kernelWidth, kernelHeight);
             e.Result = asciify.Asciitize(bmp);
-
-
-        }
+        }//end method
 
         #endregion
 
@@ -115,7 +114,7 @@ namespace Ascii_Gen_New {
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e) {// generate button; makes the ascii image
 
-            double temp = txtAscii.FontSize / kernelSize;
+            double temp = txtAscii.FontSize / kernelWidth;
             if (imgMain.Source != null) {
                 // change the generate buttons color to red
                 btnGenerate.Background = System.Windows.Media.Brushes.IndianRed;
@@ -189,13 +188,13 @@ namespace Ascii_Gen_New {
             }
         }
 
-        private void btnOk_Click(object sender, RoutedEventArgs e)
-        {
+        private void btnOk_Click(object sender, RoutedEventArgs e) {
             numberOfThreads = int.Parse(txtThreads.Text);
-            kernelSize = int.Parse(txtKernels.Text);
+            kernelWidth = int.Parse(txtKernelWidth.Text);/////implement tryparse or smth like that
+            kernelHeight = int.Parse(txtKernelHeight.Text);
             colorRange = cmbRange.SelectedIndex + 1;
             settingsBox.Visibility = Visibility.Collapsed;
-        }
+        }//end event
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
