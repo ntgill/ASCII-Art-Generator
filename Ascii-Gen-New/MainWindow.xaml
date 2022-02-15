@@ -46,10 +46,16 @@
         <!-- Generate button -->
         <Button Name="btnGenerate" Grid.Column="1" Grid.Row="1"  Content="Generate" HorizontalAlignment="Center"
                             Height="50" Width="100"  FontSize="16" FontWeight="Bold" VerticalAlignment="Bottom"
-                            Click="btnGenerate_Click" Margin="5, 0, 5, 0">
+                            Click="btnGenerate_Click" Margin="5, 0, 5, 0" Foreground="Black" KeyDown="EnterKeyPress">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Red"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+
                 </Style>
             </Button.Resources>
             <Button.Background>
@@ -113,7 +119,7 @@
             </Label.Style>
         </Label>
 
-        
+
         <!-- Settings Menu -->
         <Grid x:Name="settingsBox" Visibility="Collapsed" Grid.ColumnSpan="3" Grid.RowSpan="2">
             <Grid Background="Black" Opacity="0.5" Margin="-10"/>
@@ -121,7 +127,7 @@
                 MinWidth="250" Background="LightGray" BorderBrush="Black" BorderThickness="1" 
                 CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Vertical">
-                    
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Margin="10,10,5,10" Text="# of Threads:" FontWeight="Bold" FontSize="16" FontFamily="Cambria" VerticalAlignment="Center" HorizontalAlignment="Left" />
                         <TextBox x:Name="txtThreads" MinWidth="50" HorizontalAlignment="Right" Text="6" TextAlignment="Center" Margin="0" FontSize="16" VerticalAlignment="Center" MaxLength="2" PreviewTextInput="txtThreads_PreviewTextInput" />
@@ -136,7 +142,7 @@
                         <TextBlock Margin="10,10,5,10" Text="Color Range: " FontWeight="Bold" FontSize="16" FontFamily="Cambria" VerticalAlignment="Center" HorizontalAlignment="Left" />
                         <ComboBox Name="cmbRange" Width="50" Height="25" FontSize="16" HorizontalAlignment="Right" IsReadOnly="True" SelectedIndex="0"/>
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                         <Button x:Name="btnOk" Margin="5" Content="Ok" FontSize="16" Background="{x:Null}" Click="btnOk_Click"/>
                         <Button x:Name="btnCancel" Margin="5" Content="Cancel" FontSize="16" Background="{x:Null}" Click="btnCancel_Click"/>

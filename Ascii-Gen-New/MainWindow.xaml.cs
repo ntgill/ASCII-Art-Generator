@@ -25,6 +25,7 @@ namespace Ascii_Gen_New {
         Stopwatch sw = new Stopwatch();
         
 
+
         // CONSTRUCTOR
         public MainWindow() {
             InitializeComponent();
@@ -61,18 +62,24 @@ namespace Ascii_Gen_New {
             progressBar.Value = e.ProgressPercentage;
         }
 
-        private void worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Result == null)
-            {
+        private void worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
+
+            if (e.Result == null) {
                 throw new Exception("Result is null");
-            }
+            }//end if
 
             txtAscii.Text = e.Result.ToString();
             StopClock();
             btnGenerate.Background = ogColor;
-            
-        }
+
+            //Keep same proportions if different kernel size
+            if (kernelSize != 4) {
+                txtAscii.FontSize = kernelSize * 1.5;
+            } else {
+                txtAscii.FontSize = 6;
+            }//end if
+
+        }//end method
 
         private void worker_DoWork(object? sender, DoWorkEventArgs e)
         {
@@ -90,11 +97,21 @@ namespace Ascii_Gen_New {
             // Call asciitize method
             Asciify asciify = new Asciify(sender as BackgroundWorker, actualWidth, multithread, numberOfThreads, colorRange, invert, useKernels, kernelSize);
             e.Result = asciify.Asciitize(bmp);
+
+
         }
 
         #endregion
 
         #region FORM OBJECT METHODS
+        private void EnterKeyPress(object sender, KeyEventArgs e) {
+
+            if (imgMain.Source != null) {
+                if (e.Key == Key.Return) {
+                    btnGenerate_Click(sender, e);
+                }//end if
+            }//end if
+        }//end event
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e) {// generate button; makes the ascii image
 
@@ -109,10 +126,6 @@ namespace Ascii_Gen_New {
 
                 // starts the timer
                 StartClock();
-
-                if (kernelSize != 4) {
-                    txtAscii.FontSize = kernelSize * 1.5;
-                }//end if
 
                 // init worker and start asciify
                 BackgroundWorker worker = worker_Initialize();
@@ -132,6 +145,8 @@ namespace Ascii_Gen_New {
                 // empty progress bar and timer
                 progressBar.Value = 0;
                 ResetClock();
+                var window = Window.GetWindow(this);
+                window.KeyDown += EnterKeyPress;
             }//end if
         }//end event
 
